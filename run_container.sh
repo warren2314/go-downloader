@@ -1,12 +1,29 @@
 #!/bin/bash
 
-# Prompt the user for the package(s) to download
-read -p "Enter the package(s) to download: " package_to_download
+echo "Please enter the Go module you want without the version: "
+read module
+echo "Please enter the version needed for the package: "
+read version
 
-# Build the container
-docker build -t my-image --build-arg PACKAGE_TO_DOWNLOAD="$package_to_download" .
-docker run -v /home/ubuntu/Downloads:/output my-image
+docker build -t go-downloader .
 
-# Change the ownership of the Downloaded files
-sudo chown ubuntu:ubuntu /home/ubuntu/Downloads/project.tgz # Change this to your pc name 
-sudo chown ubuntu:ubuntu /home/ubuntu/Downloads/nancy-report.csv # Change this to your pc name
+docker run --name go -e MODULE=$module -e VERSION=$version -v $(pwd):/downloads go-downloader /bin/sh -c "\
+  cd /go/Project1; \
+  go get \$MODULE@\$VERSION; \
+  go list --json -m all | ../nancy/nancy sleuth -o csv > /go/nancy-report.csv; \
+  ls -al /go; \
+  ls -al /go/Project1; \
+  tar czf project.tgz /go/pkg/mod"
+
+docker cp go:/go/project.tgz ~/Downloads/project.tgz
+docker cp go:/go/nancy-report.csv ~/Downloads/nancy-report.csv
+
+
+sudo chown $USER:$USER project.tgz
+sudo chown $USER:$USER nancy-report.csv
+sudo chown $USER:$USER ~/Downloads/nancy-report.csv
+
+docker rm go
+
+
+
