@@ -1,17 +1,20 @@
-#!/bin/bash
+#!/bin/sh
 
-# Download the specified Go Module with the version
-go get $GO_MODULE@$GO_VERSION
+echo "Enter module name:"
+read MODULE
 
-# Move this to the go.mod file
-go mod edit -replace $GO_MODULE=$GO_MODULE@$GO_VERSION
+echo "Enter module version:"
+read VERSION
 
-# Check against Nancy for vulnerabilities
-go list -m all | ../nancy/nancy sleuth --csv > /go/nancy-report.csv
+if [ -z "$MODULE" ] || [ -z "$VERSION" ]; then
+  echo "Module or version not provided. Exiting."
+  exit 1
+fi
 
-cp /go/project.tgz /output/
-cp /go/nancy-report.csv /output/
+echo "Downloading $MODULE@$VERSION"
+echo "require $MODULE@$VERSION" >> /go/Project1/go.mod
+cd /go/Project1 && go mod download
 
-# Exit the container
-exit 0
+# Include the rest of your start.sh logic here
+
 

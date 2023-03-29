@@ -11,19 +11,15 @@ docker run --name go -e MODULE=$module -e VERSION=$version -v $(pwd):/downloads 
   cd /go/Project1; \
   go get \$MODULE@\$VERSION; \
   go list --json -m all | ../nancy/nancy sleuth -o csv > /go/nancy-report.csv; \
+  tar czf /go/project.tgz /go/pkg/mod; \
   ls -al /go; \
-  ls -al /go/Project1; \
-  tar czf project.tgz /go/pkg/mod"
+  ls -al /go/Project1"
 
 docker cp go:/go/project.tgz ~/Downloads/project.tgz
 docker cp go:/go/nancy-report.csv ~/Downloads/nancy-report.csv
 
-
-sudo chown $USER:$USER project.tgz
-sudo chown $USER:$USER nancy-report.csv
+sudo chown $USER:$USER ~/Downloads/project.tgz
 sudo chown $USER:$USER ~/Downloads/nancy-report.csv
 
 docker rm go
-
-
 
