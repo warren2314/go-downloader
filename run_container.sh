@@ -1,25 +1,14 @@
-#!/bin/bash
+#!/bin/sh
 
-echo "Please enter the Go module you want without the version: "
-read module
-echo "Please enter the version needed for the package: "
-read version
+# Check if the image exists
+image_exists=$(docker images -q go-downloader)
 
-docker build -t go-downloader .
+# Build the image if it doesn't exist
+if [ -z "$image_exists" ]; then
+  echo "Building the go-downloader image..."
+  docker build -t go-downloader .
+fi
 
-docker run --name go -e MODULE=$module -e VERSION=$version -v $(pwd):/downloads go-downloader /bin/sh -c "\
-  cd /go/Project1; \
-  go get \$MODULE@\$VERSION; \
-  go list --json -m all | ../nancy/nancy sleuth -o csv > /go/nancy-report.csv; \
-  tar czf /go/project.tgz /go/pkg/mod; \
-  ls -al /go; \
-  ls -al /go/Project1"
-
-docker cp go:/go/project.tgz ~/Downloads/project.tgz
-docker cp go:/go/nancy-report.csv ~/Downloads/nancy-report.csv
-
-sudo chown $USER:$USER ~/Downloads/project.tgz
-sudo chown $USER:$USER ~/Downloads/nancy-report.csv
-
-docker rm go
+# Run the container
+docker run --rm -it --name go -v ~/Downloads:/downloads --tty go-downloader
 
