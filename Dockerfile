@@ -1,7 +1,9 @@
-FROM golang:1.17-buster
+FROM golang:1.21-buster
 
 RUN apt-get update && \
     apt-get install git
+    
+RUN rm -rf pkg/    
 
 RUN git clone https://github.com/sonatype-nexus-community/nancy.git
 
@@ -11,11 +13,13 @@ RUN cd nancy/ && \
 
 RUN mkdir Project1
 
+RUN mv nancy/nancy Project1
+
 WORKDIR /go/Project1
 
 RUN go mod init example.com/1
 
-ENV GO_VERSION=1.16
+ENV GO_VERSION=1.21
 
 RUN sed -i "s/go [[:digit:]]\+\(\.[[:digit:]]\+\)*/go ${GO_VERSION}/g" /go/Project1/go.mod
 

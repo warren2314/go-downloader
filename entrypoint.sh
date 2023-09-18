@@ -3,7 +3,7 @@
 sh /go/process_modules.sh
 
 cd /go/Project1
-go list --json -m all | ../nancy/nancy sleuth -o csv > /go/nancy-report.csv
+go list --json -m all | nancy sleuth -o csv > /go/nancy-report.csv
 tar czf /go/project.tgz /go/pkg/mod
 
 # Define the target directory

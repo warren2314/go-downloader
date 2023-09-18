@@ -1,0 +1,4 @@
+cloud.google.com/go/firestore
+y
+v1.12.0
+q
