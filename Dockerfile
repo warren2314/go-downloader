@@ -1,4 +1,4 @@
-FROM golang:1.21-buster
+FROM golang:latest
 
 RUN apt-get update && \
     apt-get install git
