@@ -3,10 +3,14 @@
 sh /go/process_modules.sh
 
 cd /go/Project1
-echo "Starting Nancy Report Generation..." >> go/nancy.log
+
 go list --json -m all | /go/Project1/nancy sleuth -o csv > /go/nancy-report.csv
-echo "Nancy Report Generation Completed." >> /go/nancy.log
-tar czf /go/project.tgz /go/pkg/mod
+
+# Remove the sumdb directory
+rm -rf /go/pkg/mod/cache/download/sumdb
+
+# Archive the downloads directory
+tar czf /go/project.tgz /go/pkg/mod/cache/download
 
 # Define the target directory
 target_dir="/downloads"
