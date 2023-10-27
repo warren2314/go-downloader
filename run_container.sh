@@ -10,5 +10,4 @@ if [ -z "$image_exists" ]; then
 fi
 
 # Run the container
-docker run --rm -i --name go -v ~/Downloads:/downloads go-downloader < packages.txt
-
+docker run --rm -i --name go -v ~/Downloads:/downloads go-downloader && ./cleanup.sh
