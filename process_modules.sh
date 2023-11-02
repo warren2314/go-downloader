@@ -21,6 +21,7 @@ while true; do
   fi   
 
   cd /go/Project1
+  go clean -modcache
   $go_get_command
   cd ..
 done
