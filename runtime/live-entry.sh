@@ -17,7 +17,7 @@ sed -i "s/go [[:digit:]]\+\(\.[[:digit:]]\+\)*/go ${GO_VERSION}/g" /go/Project1/
 cd /go/Project1
 go clean -modcache
 
-go get $GO_MODULE_DOWNLOAD
+go get -t $GO_MODULE_DOWNLOAD
 
 #go list --json -m all | /go/Project1/nancy sleuth -o csv > /go/nancy-report.csv
 go list --json -m all > /temp/downloads/packages.json
