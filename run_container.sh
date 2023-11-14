@@ -10,7 +10,7 @@ if [ -z "$image_exists" ]; then
 fi
 
 while true; do
-  echo "Please enter the Go module you want without the version (or 'q' to quit): "
+  echo "Please enter the Go module (eg golang.org/x/image@v0.14.0)"
   read MODULE
 
   if [ "$module" = "q" ]; then
