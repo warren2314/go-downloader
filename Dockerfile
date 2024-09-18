@@ -1,7 +1,7 @@
 FROM golang:latest
 
-RUN apt-get update && \
-    apt-get install git
+RUN apt-get update -y && \
+    apt-get install git -y
     
 RUN rm -rf pkg/    
 
